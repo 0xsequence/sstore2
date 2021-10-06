@@ -59,7 +59,7 @@ jobs:
       - run: yarn test
 
   tests-full:
-    name: Run tests
+    name: Run tests (full ranges)
     runs-on: ubuntu-latest
     needs: [install]
     steps:

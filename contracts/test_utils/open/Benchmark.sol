@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../../SSTORE2.sol";
-import "../../SSTORE2Mapping.sol";
+import "../../SSTORE2Map.sol";
 
 
 contract Benchmark {
@@ -19,11 +19,11 @@ contract Benchmark {
   }
 
   function write2(bytes32 _key, bytes calldata _data) external {
-    SSTORE2Mapping.write(_key, _data);
+    SSTORE2Map.write(_key, _data);
   }
 
   function read2(bytes32 _key) external returns (bytes memory) {
-    return SSTORE2Mapping.read(_key);
+    return SSTORE2Map.read(_key);
   }
 
   function write3(bytes calldata _data) external {

@@ -1,4 +1,4 @@
-# SLOAD2 & SLOAD2-Mapping
+# SLOAD2 & SLOAD2-Map
 
 SLOAD2 is a set of Solidity libraries for writing and reading contract storage paying a fraction of the cost, it uses contract code as storage, writing data takes the form of contract creations and reading data uses `EXTCODECOPY`.
 
@@ -15,7 +15,7 @@ SLOAD2 is a set of Solidity libraries for writing and reading contract storage p
 
 ## Gas savings
 
-Gas costs are overall lower compared with traditional SSTORED and SLOAD operations, SLOAD2 (auto-generated key) and SLOAD2-Mapping (custom key) have different costs associated with using them.
+Gas costs are overall lower compared with traditional SSTORED and SLOAD operations, SLOAD2 (auto-generated key) and SLOAD2-Map (custom key) have different costs associated with using them.
 
 The root cause is that custom-key SLOAD2 needs to use CREATE3 to deploy the data contract, and CREATE3 needs to deploy an aditional proxy contract for each deployed contract.
 
@@ -23,7 +23,7 @@ The root cause is that custom-key SLOAD2 needs to use CREATE3 to deploy the data
 
 Reading data is a lot cheaper compared to native SLOAD operations (native solidity storage).
 
-After reading 32 bytes `SSTORE2.read` becomes the cheaper option, and `SSTORE2Mapping.read` becomes cheaper when reading 33 bytes or more.
+After reading 32 bytes `SSTORE2.read` becomes the cheaper option, and `SSTORE2Map.read` becomes cheaper when reading 33 bytes or more.
 
 | SIZE  | SLOAD   | SLOAD2 | SLOAD2 - Map |
 |-------|---------|--------|--------------|
@@ -44,7 +44,7 @@ After reading 32 bytes `SSTORE2.read` becomes the cheaper option, and `SSTORE2Ma
 
 Writing data is also a lot cheaper compared to native SSTORE operations (native solidity storage), but gains become aparent after higher data sizes.
 
-After writing 32 bytes `SSTORE2.write` becomes the cheaper option, and `SSTORE2Mapping.write` becomes cheaper only when writting 96 bytes or more.
+After writing 32 bytes `SSTORE2.write` becomes the cheaper option, and `SSTORE2Map.write` becomes cheaper only when writting 96 bytes or more.
 
 | SIZE  | SSTORE   | SSTORE2 | SSTORE2 - Map |
 |-------|----------|---------|---------------|

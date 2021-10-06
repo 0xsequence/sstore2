@@ -4,12 +4,12 @@ const { chunksFromRange } = require('./utils')
 
 const randomKey = () => ethers.utils.hexlify(ethers.utils.randomBytes(32))
 
-describe('SSTORE2Mapping', function () {
+describe('SSTORE2Map', function () {
   let sstore2Map
 
   beforeEach(async () => {
-    const TestSSTORE2Mapping = await ethers.getContractFactory('TestSSTORE2Mapping')
-    sstore2Map = await TestSSTORE2Mapping.deploy()
+    const TestSSTORE2Map = await ethers.getContractFactory('TestSSTORE2Map')
+    sstore2Map = await TestSSTORE2Map.deploy()
     await sstore2Map.deployed()
   })
 

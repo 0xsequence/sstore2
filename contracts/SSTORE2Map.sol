@@ -6,11 +6,11 @@ import "@0xsequence/create3/contracts/Create3.sol";
 import "./utils/Bytecode.sol";
 
 
-library SSTORE2Mapping {
+library SSTORE2Map {
   error WriteError();
 
-  //                                         keccak256(bytes('@0xSequence.SSTORE2Mapping.slot'))
-  bytes32 private constant SLOT_KEY_PREFIX = 0x76aeb1768b9135311a3bd386e2e4c4e6f09dd72058d7573c591826b7b2760c14;
+  //                                         keccak256(bytes('@0xSequence.SSTORE2Map.slot'))
+  bytes32 private constant SLOT_KEY_PREFIX = 0xd351a9253491dfef66f53115e9e3afda3b5fdef08a1de6937da91188ec553be5;
 
   function internalKey(bytes32 _key) internal pure returns (bytes32) {
     // Mutate the key so it doesn't collide
