@@ -1,0 +1,121 @@
+
+on: [push]
+
+name: tests
+
+jobs:
+  install:
+    name: Install dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - uses: actions/cache@master
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-install-${{ hashFiles('**/package.json', '**/yarn.lock') }}
+      - run: yarn install --network-concurrency 1
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+
+  lint:
+    name: Run lint
+    runs-on: ubuntu-latest
+    needs: [install]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - uses: actions/cache@master
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-install-${{ hashFiles('**/package.json', '**/yarn.lock') }}
+      - run: yarn lint
+
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: [install]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - uses: actions/cache@master
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-install-${{ hashFiles('**/package.json', '**/yarn.lock') }}
+      - run: yarn test
+
+  tests-full:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: [install]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - uses: actions/cache@master
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-install-${{ hashFiles('**/package.json', '**/yarn.lock') }}
+      - run: yarn test:full
+
+  build:
+    name: Run build
+    runs-on: ubuntu-latest
+    needs: [install]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - uses: actions/cache@master
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-install-${{ hashFiles('**/package.json', '**/yarn.lock') }}
+      - run: yarn build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: artifacts
+
+  coverage:
+    name: Run coverage
+    runs-on: ubuntu-latest
+    needs: [install]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - uses: actions/cache@master
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-install-${{ hashFiles('**/package.json', '**/yarn.lock') }}
+      - run: yarn coverage
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-coverage
+          path: coverage

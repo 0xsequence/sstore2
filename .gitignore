@@ -1,0 +1,14 @@
+node_modules
+.env
+
+#Hardhat files
+cache
+artifacts
+
+coverage.json
+coverage-final.json
+coverage
+
+benchmark.csv
+
+cost.csv
