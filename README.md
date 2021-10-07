@@ -5,6 +5,8 @@
 
 SLOAD2 is a set of Solidity libraries for writing and reading contract storage paying a fraction of the cost, it uses contract code as storage, writing data takes the form of contract creations and reading data uses `EXTCODECOPY`.
 
+> **The library is not audited, it's recommended to perform a full audit of SSTORE2 and CREATE3 before using this code on a production envirovment.**
+
 ## Features
 
 - All SLOAD2 storages are write-once only
@@ -257,10 +259,6 @@ contract Demo {
 }
 
 ```
-
-# Audits
-
-> **The library is not audited, it's recommended to perform a full audit of SSTORE2 and CREATE3 before using this code on a production envirovment.**
 
 # License
 
