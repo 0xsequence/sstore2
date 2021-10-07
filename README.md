@@ -1,5 +1,8 @@
 # SLOAD2 & SLOAD2-Map
 
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+[![tests](https://github.com/0xsequence/sstore2/actions/workflows/tests.yml/badge.svg)](https://github.com/0xsequence/sstore2/actions/workflows/tests.yml)
+
 SLOAD2 is a set of Solidity libraries for writing and reading contract storage paying a fraction of the cost, it uses contract code as storage, writing data takes the form of contract creations and reading data uses `EXTCODECOPY`.
 
 ## Features
