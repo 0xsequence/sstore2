@@ -178,14 +178,14 @@ import "@0xsequence/sstore2/contracts/SSTORE2Map.sol";
 contract Demo {
   // This works
   function good() external {
-    SSTORE2Map.write("@key-1", bytes("hola"));
-    SSTORE2Map.write("@key-2", bytes("mundo"));
+    SSTORE2Map.write(string("@key-1"), bytes("hola"));
+    SSTORE2Map.write(string("@key-2"), bytes("mundo"));
   }
 
   // This reverts
   function bad() external {
-    SSTORE2Map.write("@key-3", bytes("adios"));
-    SSTORE2Map.write("@key-3", bytes("mundo"));
+    SSTORE2Map.write(string("@key-3"), bytes("adios"));
+    SSTORE2Map.write(string("@key-3"), bytes("mundo"));
   }
 }
 
