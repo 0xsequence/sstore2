@@ -7,7 +7,7 @@ async function addressFromWrite (tx) {
   return ethers.utils.defaultAbiCoder.decode(['address'], log.data)[0]
 }
 
-async function costFromTx(tx) {
+async function costFromTx (tx) {
   const log = (await tx).logs[(await tx).logs.length - 1]
   return ethers.utils.defaultAbiCoder.decode(['uint256'], log.data)[0].toNumber()
 }
@@ -51,8 +51,8 @@ async function main () {
     const r2 = await (await bench.read2(key)).wait()
     const r3 = await (await bench.read3(addr)).wait()
 
-    console.log('size:', i, 'native write:', await costFromTx(w1), 'sstore2 write:', await costFromTx(w3), 'sstore2-map write:', await costFromTx(w2), )
-    console.log('size:', i, 'native read:', await costFromTx(r1), 'sstore2 read:', await costFromTx(r3), 'sstore2-map read:', await costFromTx(r2), )
+    console.log('size:', i, 'native write:', await costFromTx(w1), 'sstore2 write:', await costFromTx(w3), 'sstore2-map write:', await costFromTx(w2))
+    console.log('size:', i, 'native read:', await costFromTx(r1), 'sstore2 read:', await costFromTx(r3), 'sstore2-map read:', await costFromTx(r2))
     console.log()
 
     await csvWriter.writeRecords([{
