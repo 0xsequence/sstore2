@@ -7,11 +7,13 @@ async function addressFromWrite (tx) {
   return ethers.utils.defaultAbiCoder.decode(['address'], log.data)[0]
 }
 
+async function costFromTx(tx) {
+  const log = (await tx).logs[(await tx).logs.length - 1]
+  return ethers.utils.defaultAbiCoder.decode(['uint256'], log.data)[0].toNumber()
+}
+
 async function main () {
   const Benchmark = await hre.ethers.getContractFactory('Benchmark')
-  const bench = await Benchmark.deploy()
-
-  await bench.deployed()
 
   const data = ethers.utils.randomBytes(20000)
 
@@ -31,6 +33,9 @@ async function main () {
 
   const samples = [0, 2, 32, 33, 64, 96, 128, 256, 512, 1024, 1024 * 24]
   for (const k in samples) {
+    const bench = await Benchmark.deploy()
+    await bench.deployed()
+
     const i = samples[k]
 
     const slice = data.slice(0, i)
@@ -46,18 +51,18 @@ async function main () {
     const r2 = await (await bench.read2(key)).wait()
     const r3 = await (await bench.read3(addr)).wait()
 
-    console.log('size:', i, 'native write:', w1.gasUsed.toNumber(), 'sstore2-map write:', w2.gasUsed.toNumber(), 'sstore2 write:', w3.gasUsed.toNumber())
-    console.log('size:', i, 'native read:', r1.gasUsed.toNumber(), 'sstore2-map read:', r2.gasUsed.toNumber(), 'sstore2 read:', r3.gasUsed.toNumber())
+    console.log('size:', i, 'native write:', await costFromTx(w1), 'sstore2 write:', await costFromTx(w3), 'sstore2-map write:', await costFromTx(w2), )
+    console.log('size:', i, 'native read:', await costFromTx(r1), 'sstore2 read:', await costFromTx(r3), 'sstore2-map read:', await costFromTx(r2), )
     console.log()
 
     await csvWriter.writeRecords([{
       size: i,
-      r1: r1.gasUsed.toString(),
-      r2: r2.gasUsed.toString(),
-      r3: r3.gasUsed.toString(),
-      w1: w1.gasUsed.toString(),
-      w2: w2.gasUsed.toString(),
-      w3: w3.gasUsed.toString()
+      r1: await costFromTx(r1),
+      r2: await costFromTx(r2),
+      r3: await costFromTx(r3),
+      w1: await costFromTx(w1),
+      w2: await costFromTx(w2),
+      w3: await costFromTx(w3)
     }])
   }
 }

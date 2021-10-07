@@ -27,16 +27,17 @@ After reading 32 bytes `SSTORE2.read` becomes the cheaper option, and `SSTORE2Ma
 
 | SIZE  | SLOAD   | SLOAD2 | SLOAD2 - Map |
 |-------|---------|--------|--------------|
-|     0 |   25135 |  25534 |        27741 |
-|    32 |   27448 |  25618 |        27825 |
-|    33 |   29697 |  25717 |        27921 |
-|    64 |   29679 |  25702 |        27909 |
-|    96 |   31910 |  25774 |        27994 |
-|   128 |   34141 |  25870 |        28078 |
-|   256 |   43066 |  26207 |        28415 |
-|   512 |   60915 |  26881 |        29089 |
-|  1024 |   96618 |  28232 |        30441 |
-| 24576 | 1422666 |  81124 |        83364 |
+|     0 |    2679 |   3102 |         5258 |
+|     2 |    2852 |   3108 |         5261 |
+|    32 |    4914 |   3108 |         5264 |
+|    33 |    7067 |   3114 |         5267 |
+|    64 |    7067 |   3114 |         5270 |
+|    96 |    9220 |   3120 |         5276 |
+|   128 |   11373 |   3126 |         5282 |
+|   256 |   19985 |   3150 |         5306 |
+|   512 |   37209 |   3198 |         5355 |
+|  1024 |   71659 |   3296 |         5454 |
+| 24576 | 1349161 |   7627 |         9805 |
 
 ![SSTORE Cost](./images/sload_cost.svg)
 
@@ -44,19 +45,21 @@ After reading 32 bytes `SSTORE2.read` becomes the cheaper option, and `SSTORE2Ma
 
 Writing data is also cheaper than native SSTORE operations (native solidity storage), but gains become apparent after higher data sizes.
 
-After writing 32 bytes `SSTORE2.write` becomes the cheaper option, and `SSTORE2Map.write` becomes cheaper only when writing 96 bytes or more.
+After writing 32 bytes `SSTORE2.write` becomes the cheaper option, and `SSTORE2Map.write` becomes cheaper only when writing 128 bytes or more.
 
 | SIZE  | SSTORE   | SSTORE2 | SSTORE2 - Map |
 |-------|----------|---------|---------------|
-|     0 |    25138 |   57097 |        101312 |
-|    32 |    67812 |   64189 |        108489 |
-|    64 |    90494 |   71269 |        115653 |
-|    96 |   113176 |   78349 |        122818 |
-|   128 |   135858 |   85429 |        129982 |
-|   256 |   226574 |  113739 |        158629 |
-|   512 |   408006 |  170359 |        215925 |
-|  1024 |   770870 |  283608 |        330534 |
-| 24576 | 14220516 | 4488942 |       4591893 |
+|     0 |     2660 |   35323 |         78768 |
+|     2 |    22607 |   35819 |         79264 |
+|    32 |    44810 |   41891 |         85421 |
+|    33 |    66980 |   42187 |         85717 |
+|    64 |    66980 |   48459 |         92073 |
+|    96 |    89150 |   55027 |         98726 |
+|   128 |   111320 |   61595 |        105378 |
+|   256 |   200000 |   87869 |        131989 |
+|   512 |   377360 |  140417 |        185213 |
+|  1024 |   732080 |  245522 |        291678 |
+| 24576 | 13878890 | 4148020 |       4250201 |
 
 ![SSTORE Cost](./images/sstore_cost.svg)
 
