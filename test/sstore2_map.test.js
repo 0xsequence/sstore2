@@ -131,7 +131,7 @@ describe('SSTORE2Map', function () {
 
       it('Should read empty key', async () => {
         const data = await sstore2Map[read[0]](getKey(ethers.utils.randomBytes(32)))
-        expect(data).to.be.equal("0x")
+        expect(data).to.be.equal('0x')
       })
 
       if (!process.env.COVERAGE) {
@@ -210,7 +210,7 @@ describe('SSTORE2Map', function () {
 
         it('Should return empty bytes if _start is above end of file', async () => {
           const data = await sstore2Map[read[1]](key, 101)
-          expect(data).to.be.equal("0x")
+          expect(data).to.be.equal('0x')
         })
 
         it('Should fail to retrieve slice if _end is below _start', async () => {
