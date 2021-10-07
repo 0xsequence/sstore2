@@ -5,6 +5,11 @@ pragma solidity ^0.8.0;
 library Bytecode {
   error InvalidCodeAtRange(uint256 _size, uint256 _start, uint256 _end);
 
+  /**
+    @notice Generate a creation code that results on a contract with `_code` as bytecode
+    @param _code The returning value of the resulting `creationCode`
+    @return creationCode (constructor) for new contract
+  */
   function creationCodeFor(bytes memory _code) internal pure returns (bytes memory) {
     /*
       0x00    0x63         0x63XXXXXX  PUSH4 _code.length  size
@@ -25,16 +30,31 @@ library Bytecode {
     );
   }
 
+  /**
+    @notice Returns the size of the code on a given address
+    @param _addr Address that may or may not contain code
+    @return size of the code on the given `_addr`
+  */
   function codeSize(address _addr) internal view returns (uint256 size) {
     assembly { size := extcodesize(_addr) }
   }
 
-  // Credit: https://gist.github.com/KardanovIR/fe98661df9338c842b4a30306d507fbd
+  /**
+    @notice Returns the code of a given address
+    @dev It will fail if `_end < _start`
+    @param _addr Address that may or may not contain code
+    @param _start number of bytes of code to skip on read
+    @param _end index before which to end extraction
+    @return oCode read from `_addr` deployed bytecode
+
+    Forked from: https://gist.github.com/KardanovIR/fe98661df9338c842b4a30306d507fbd
+  */
   function codeAt(address _addr, uint256 _start, uint256 _end) internal view returns (bytes memory oCode) {
     uint256 csize = codeSize(_addr);
     if (csize == 0) return bytes("");
 
-    if (_end < _start || _start > csize) revert InvalidCodeAtRange(csize, _start, _end); 
+    if (_start > csize) return bytes("");
+    if (_end < _start) revert InvalidCodeAtRange(csize, _start, _end); 
 
     unchecked {
       uint256 reqSize = _end - _start;

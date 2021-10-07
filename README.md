@@ -42,9 +42,9 @@ After reading 32 bytes `SSTORE2.read` becomes the cheaper option, and `SSTORE2Ma
 
 ### SSTORE Cost (data writes)
 
-Writing data is also a lot cheaper compared to native SSTORE operations (native solidity storage), but gains become aparent after higher data sizes.
+Writing data is also cheaper than native SSTORE operations (native solidity storage), but gains become apparent after higher data sizes.
 
-After writing 32 bytes `SSTORE2.write` becomes the cheaper option, and `SSTORE2Map.write` becomes cheaper only when writting 96 bytes or more.
+After writing 32 bytes `SSTORE2.write` becomes the cheaper option, and `SSTORE2Map.write` becomes cheaper only when writing 96 bytes or more.
 
 | SIZE  | SSTORE   | SSTORE2 | SSTORE2 - Map |
 |-------|----------|---------|---------------|
@@ -59,6 +59,8 @@ After writing 32 bytes `SSTORE2.write` becomes the cheaper option, and `SSTORE2M
 | 24576 | 14220516 | 4488942 |       4591893 |
 
 ![SSTORE Cost](./images/sstore_cost.svg)
+
+> **Notice:** gas savings may change in future Ethereum hard-forks.
 
 ## Installation
 
@@ -77,7 +79,9 @@ SSTORE2 comes in two flavors, `SSTORE2` and `SSTORE2Map`. The main difference is
 
 ## SSTORE2
 
-Calling `SSTORE2.write` with some `data` returns an `address` pointer, this pointer address can later be feed into `SSTORE2.read` to retrieve the same `data`. Every time `write` is called it generates a new pointer, pointers can't be deleted.
+Calling `SSTORE2.write` with some `data` returns an `address` pointer; this pointer address can later be feed into `SSTORE2.read` to retrieve the same `data`. Every time `write` is called it generates a new pointer, pointers can't be deleted.
+
+> Notice: reading a never an invalid pointer may return an empty bytes array **or** contract bytecode.
 
 ```solidity
 pragma solidity ^0.8.0;
@@ -100,7 +104,7 @@ contract Demo {
 
 ### Arbitrary size immutables
 
-Solidity 0.8.9 doesn't support variable size immutable variables, these can be emulated using SSTORE2 and immutable pointers.
+Solidity 0.8.9 doesn't support variable size immutable variables; these can be emulated using SSTORE2 and immutable pointers.
 
 ```solidity
 pragma solidity ^0.8.0;
@@ -135,9 +139,11 @@ contract Broken {
 
 ## SSTORE2Map
 
-SSTORE2Map behaves similarly to SSTORE2, but instead of auto-generating a pointer on each `SSTORE2Map.write` call it takes an arbitrary `key` in the form of a `bytes32` variable, this key must later be provided to `SSTORE2Map.read` to retrieve the written value.
+SSTORE2Map behaves similarly to SSTORE2, but instead of auto-generating a pointer on each `SSTORE2Map.write` call it takes an arbitrary `key` in the form of a `bytes32` variable; this key must later be provided to `SSTORE2Map.read` to retrieve the written value.
 
 The map store is also write-once, meaning that calling `SSTORE2Map.write` TWICE with the same key will fail. There is no mechanism for deleting or removing the value of a given key.
+
+> Notice: reading a never written key will always return an empty array of bytes.
 
 ```solidity
 pragma solidity ^0.8.0;
@@ -185,13 +191,13 @@ contract Demo {
 
 ```
 
-> Notice: `strings` can be used as `SSTORE2Map`, they get interanally mapped as `keccak256(bytes(<string>)`.
+> Notice: `strings` can be used as `SSTORE2Map`; they get internally mapped as `keccak256(bytes(<string>)`.
 
 # Reading slices
 
-Both `SSTORE2` and `SSTORE2Map` support reading slices of data, this behaviors mirrors javascript's `.slice(start, end)`.
+Both `SSTORE2` and `SSTORE2Map` support reading data slices; their behaviors mirror javascript's `.slice(start, end)`.
 
-The functionality can be used for future-proofing a contract in case that code merkelization is ever implemented.
+The functionality can be used for future-proofing a contract in the case that code merkelization is ever implemented.
 
 ```solidity
 pragma solidity ^0.8.0;
@@ -224,6 +230,11 @@ contract Demo {
     emit Sliced(
       SSTORE2.read(pointer, 2, 42000)
     );
+
+    // 0x
+    emit Sliced(
+      SSTORE2.read(pointer, 41000, 42000)
+    );
   }
 
   function badSlies() external {
@@ -234,16 +245,14 @@ contract Demo {
     emit Sliced(
       SSTORE2.read(pointer, 3, 2)
     );
-
-    // This reverts
-    // start must be below of end of data
-    emit Sliced(
-      SSTORE2.read(pointer, 4)
-    );
   }
 }
 
 ```
+
+# Audits
+
+> **The library is not audited, it's recommended to perform a full audit of SSTORE2 and CREATE3 before using this code on a production envirovment.**
 
 # License
 

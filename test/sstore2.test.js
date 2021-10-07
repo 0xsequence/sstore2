@@ -44,6 +44,11 @@ describe('SSTORE2', function () {
     expect(await sstore2.read1(pointer)).to.equal('0x')
   })
 
+  it('Should read empty pointer', async () => {
+    const data = await sstore2.read1(ethers.Wallet.createRandom().address)
+    expect(data).to.be.equal("0x")
+  })
+
   if (!process.env.COVERAGE) {
     it('Should fail to write max contract size (24576 bytes)', async () => {
       const data = ethers.utils.hexlify(ethers.utils.randomBytes(24576))
@@ -89,9 +94,9 @@ describe('SSTORE2', function () {
       expect(await sstore2.read3(pointer, 50, 200)).to.equal(ethers.utils.hexlify(data.slice(50)))
     })
 
-    it('Should fail to retrieve slice if _start is above end of file', async () => {
-      const tx = sstore2.read2(pointer, 101)
-      await expect(tx).to.be.reverted
+    it('Should return empty bytes if _start is above end of file', async () => {
+      const data = await sstore2.read2(pointer, 101)
+      expect(data).to.be.equal("0x")
     })
 
     it('Should fail to retrieve slice if _end is below _start', async () => {
