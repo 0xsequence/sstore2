@@ -62,6 +62,8 @@ After writing 32 bytes `SSTORE2.write` becomes the cheaper option, and `SSTORE2M
 
 > **Notice:** gas savings may change in future Ethereum hard-forks.
 
+> **Notice x2:** due to contract code limits 24576 bytes is the maximum amount of data that can be written in a single pointer / key. Attempting to write more will result in failure.
+
 ## Installation
 
 `yarn add https://github.com/0xsequence/sstore2`
