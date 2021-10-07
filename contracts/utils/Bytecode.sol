@@ -7,13 +7,13 @@ library Bytecode {
 
   function creationCodeFor(bytes memory _code) internal pure returns (bytes memory) {
     /*
-      63 PUSH4 <CODE_SIZE>
-      80 DUP1
-      60 PUSH1 <PREFIX_SIZE> (0x0e - 14)
-      60 PUSH1 00
-      39 CODECOPY
-      60 PUSH1 00
-      F3 RETURN
+      0x00    0x63         0x63XXXXXX  PUSH4 _code.length  size
+      0x01    0x80         0x80        DUP1                size size
+      0x02    0x60         0x600e      PUSH1 14            14 size size
+      0x03    0x60         0x6000      PUSH1 00            0 14 size size
+      0x04    0x39         0x39        CODECOPY            size
+      0x05    0x60         0x6000      PUSH1 00            0 size
+      0x06    0xf3         0xf3        RETURN
       <CODE>
     */
 
