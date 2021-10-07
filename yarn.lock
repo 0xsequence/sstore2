@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@0xsequence/create3@https://github.com/0xsequence/create3.git#gas-golf":
+"@0xsequence/create3@https://github.com/0xsequence/create3.git":
   version "2.0.1"
-  resolved "https://github.com/0xsequence/create3.git#5a4a152e6be4e0ecfbbbe546992a5aaa43a4c1b0"
+  resolved "https://github.com/0xsequence/create3.git#17ea416970feb2cd8f02ca102fbe0b67a7bd68c0"
   dependencies:
     csv-writer "^1.6.0"
 

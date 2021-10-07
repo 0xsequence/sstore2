@@ -39,7 +39,7 @@
     "solidity-coverage": "^0.7.17"
   },
   "dependencies": {
-    "@0xsequence/create3": "https://github.com/0xsequence/create3.git#gas-golf",
+    "@0xsequence/create3": "https://github.com/0xsequence/create3.git",
     "csv-writer": "^1.6.0"
   }
 }
