@@ -3,8 +3,8 @@
 
 
 "@0xsequence/create3@https://github.com/0xsequence/create3.git":
-  version "2.0.1"
-  resolved "https://github.com/0xsequence/create3.git#17ea416970feb2cd8f02ca102fbe0b67a7bd68c0"
+  version "3.0.0"
+  resolved "https://github.com/0xsequence/create3.git#606096fd114f8996131c0b395a3b42625c3cab47"
   dependencies:
     csv-writer "^1.6.0"
 
