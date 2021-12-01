@@ -67,7 +67,7 @@ library Bytecode {
         // by using o_code = new bytes(size)
         oCode := mload(0x40)
         // new "memory end" including padding
-        mstore(0x40, add(oCode, and(add(add(size, add(_start, 0x20)), 0x1f), not(0x1f))))
+        mstore(0x40, add(oCode, and(add(add(size, 0x20), 0x1f), not(0x1f))))
         // store length in memory
         mstore(oCode, size)
         // actually retrieve the code, this needs assembly
