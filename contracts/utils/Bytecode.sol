@@ -12,20 +12,20 @@ library Bytecode {
   */
   function creationCodeFor(bytes memory _code) internal pure returns (bytes memory) {
     /*
-      0x00    0x63         0x63XXXXXX  PUSH4 _code.length  size
+      0x00    0x61         0x61XXXX    PUSH2 _code.length  size
       0x01    0x80         0x80        DUP1                size size
-      0x02    0x60         0x600e      PUSH1 14            14 size size
-      0x03    0x60         0x6000      PUSH1 00            0 14 size size
+      0x02    0x60         0x600a      PUSH1 10            10 size size
+      0x03    0x3d         0x3d        RETURNDATASIZE      0 10 size size
       0x04    0x39         0x39        CODECOPY            size
-      0x05    0x60         0x6000      PUSH1 00            0 size
+      0x05    0x3d         0x3d        RETURNDATASIZE      0 size
       0x06    0xf3         0xf3        RETURN
       <CODE>
     */
 
     return abi.encodePacked(
-      hex"63",
-      uint32(_code.length),
-      hex"80_60_0E_60_00_39_60_00_F3",
+      hex"61",
+      uint16(_code.length),
+      hex"80_60_0A_3D_39_3D_F3",
       _code
     );
   }
@@ -57,17 +57,16 @@ library Bytecode {
     if (_end < _start) revert InvalidCodeAtRange(csize, _start, _end); 
 
     unchecked {
-      uint256 reqSize = _end - _start;
-      uint256 maxSize = csize - _start;
+      uint256 adjustedEnd = _end < csize ? _end : csize;
 
-      uint256 size = maxSize < reqSize ? maxSize : reqSize;
+      uint256 size = adjustedEnd - _start;
 
       assembly {
         // allocate output byte array - this could also be done without assembly
         // by using o_code = new bytes(size)
         oCode := mload(0x40)
         // new "memory end" including padding
-        mstore(0x40, add(oCode, and(add(add(size, 0x20), 0x1f), not(0x1f))))
+        mstore(0x40, add(oCode, and(add(size, 0x3f), not(0x1f))))
         // store length in memory
         mstore(oCode, size)
         // actually retrieve the code, this needs assembly
